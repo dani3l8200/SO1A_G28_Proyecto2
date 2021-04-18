@@ -1,7 +1,7 @@
-# SO1A_G28_Proyecto1
+# SO1A_G28_Proyecto2
 
 ## Table of contents
-- [SO1A_G28_Proyecto1](#so1a_g28_proyecto1)
+- [SO1A_G28_Proyecto2](#so1a_g28_proyecto2)
   - [Table of contents](#table-of-contents)
   - [Description](#description)
   - [Objetives](#objetives)
