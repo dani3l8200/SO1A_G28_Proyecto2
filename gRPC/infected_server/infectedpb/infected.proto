@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package infected;
+
+option go_package="infected/infectedpb";
+
+message Infected {
+    string name = 1;
+    string location = 2;
+    int32 age = 3;
+    string infectedtype = 4;
+    string state = 5;
+}
+
+message InfectedRequest {
+    Infected infected = 1;
+}
+
+message InfectedResponse {
+    string result = 1;
+}
+
+service InfectedService {
+    rpc Infected (InfectedRequest) returns (InfectedResponse){};
+}

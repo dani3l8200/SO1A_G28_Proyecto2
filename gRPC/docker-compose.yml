@@ -1,0 +1,26 @@
+version: "3"
+
+services: 
+    server:
+      container_name: server
+      image: server:v1
+      restart: always
+      build: ./infected_server
+      volumes: 
+        - ./infected_server:/go/src/app
+      networks: 
+        - gRPC
+    client:
+      container_name: client
+      image: client:v1
+      restart: always
+      build: ./infected_cliente
+      ports: 
+        - "80:10000"
+      volumes: 
+        - ./infected_cliente:/go/src/app
+      networks: 
+        - gRPC
+networks: 
+  gRPC:
+    driver: "bridge"
