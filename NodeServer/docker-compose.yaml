@@ -1,0 +1,30 @@
+version: "3"
+services: 
+  rest-api:
+    container_name: rest-api
+    image: rest-api:v1
+    restart: always
+    build: ./backend
+    ports: 
+      - "80:3000"
+    links: 
+      - mongo
+    volumes: 
+      - ./backend:/app/
+      - ./proc/cpumod:/app/cpumod
+      - ./proc/ranmod:/app/ranmod
+    networks: 
+      - REST-API
+  mongo:
+    container_name: mongo
+    image: mongo
+    restart: always
+    volumes:
+      - ./data:/data/db
+    ports: 
+      - "27017:27017"
+    networks:
+      - REST-API
+networks: 
+  REST-API:
+    driver: "bridge"

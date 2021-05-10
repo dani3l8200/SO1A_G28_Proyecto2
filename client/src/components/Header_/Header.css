@@ -1,0 +1,36 @@
+
+h1{
+    color:whitesmoke;
+    align-items: center;
+    text-align: center;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+h1:hover{
+color: rgb(20, 100, 204);
+transition-duration: 3s;
+}
+
+
+
+
+.animate__animated.animate__bounce {
+    --animate-duration: 2s;
+  }
+
+  .fondo {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+    background-image: url(./../../assets/fondo.jpg);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-attachment: fixed;
+    font-family: cursive;
+}
+
