@@ -4,19 +4,22 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import LandscapeIcon from '@material-ui/icons/Landscape';
-import MonitorIcon from '@material-ui/icons/DesktopWindows';
+
 import PeopleAltRoundedIcon from '@material-ui/icons/PeopleAltRounded';
 import HealingRoundedIcon from '@material-ui/icons/HealingRounded';
-import ReportProblemRoundedIcon from '@material-ui/icons/ReportProblemRounded';
+
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
 import StorageIcon from '@material-ui/icons/Storage';
-import CompareIcon from '@material-ui/icons/Compare';
+
 import WcOutlinedIcon from '@material-ui/icons/WcOutlined';
 import HealingIcon from '@material-ui/icons/LocalHospitalRounded';
-import Footer from '../Footer_/Footer';
+import Rep1 from '../../pages/rep1_/Rep1';
+import Rep2 from '../../pages/rep2_/Rep2';
+import Rep3 from '../../pages/rep3_/Rep3';
+import Rep4 from '../../pages/rep4_/Rep4';
+import Rep5 from '../../pages/rep5_/Rep5';
 import './Header.css';
 import PublicOutlinedIcon from '@material-ui/icons/PublicOutlined';
 
@@ -85,13 +88,13 @@ export default function ScrollableTabsButtonForce() {
 
         
 
-          <Tab label="Collections MongoDB" icon={< StorageIcon/>} {...a11yProps(0)} />
-          <Tab label={"Top 10 of vaccinated countries "} icon={<HealingIcon />} {...a11yProps(1)} />
-          <Tab label="Pie Chart of gender vaccinated By Country" icon={< WcOutlinedIcon/>} {...a11yProps(2)} />
-          <Tab label="Last 5 vaccinated people stored in Mongo by country" icon={<PeopleAltRoundedIcon />} {...a11yProps(3)} />
-          <Tab label="Bar Chart of vaccinated age range in Redis by country" icon={< HealingRoundedIcon/>} {...a11yProps(4)} />
-          <Tab label="Interactive realtime map to query this reports" icon={<PublicOutlinedIcon />} {...a11yProps(5)} />
-          <Tab label="red infected,yellow less infected and green no infected country" icon={< ReportProblemRoundedIcon/>} {...a11yProps(6)} />
+          <Tab label="Datos almacenados en la base de datos de Mongo" icon={< StorageIcon/>} {...a11yProps(0)} />
+          <Tab label={"Top 10  países con más vacunados en Redis "} icon={<HealingIcon />} {...a11yProps(1)} />
+          <Tab label="Gráfica de pie de los géneros de los vacunados por país, en MongoDB" icon={< WcOutlinedIcon/>} {...a11yProps(2)} />
+          <Tab label="Los últimos cinco vacunados almacenados por país, en MongoDB." icon={<PeopleAltRoundedIcon />} {...a11yProps(3)} />
+          <Tab label="Gráfica de barras del rango de edades (de diez en diez) por cada país, en Redis" icon={< HealingRoundedIcon/>} {...a11yProps(4)} />
+          <Tab label="Mapa interactivo" icon={<PublicOutlinedIcon />} {...a11yProps(5)} />
+         
           
     
 
@@ -100,7 +103,7 @@ export default function ScrollableTabsButtonForce() {
 
       <TabPanel value={value} index={0}>
         <div className="fondo">
-        <Footer/>
+        <Rep1/>
         </div>
 
 
@@ -109,23 +112,31 @@ export default function ScrollableTabsButtonForce() {
       </TabPanel>
 
       <TabPanel value={value} index={1}>
-        
+      <div className="fondo">
+        <Rep2/>
+        </div>
         
       </TabPanel>
 
       <TabPanel value={value} index={2}>
-       
+      <div className="fondo">
+        <Rep3/>
+        </div>
        
       </TabPanel>
 
       <TabPanel value={value} index={3}>
-      
+      <div className="fondo">
+        <Rep4/>
+        </div>
       
       </TabPanel>
 
       <TabPanel value={value} index={4}>
         
-        
+      <div className="fondo">
+        <Rep5/>
+        </div>
       </TabPanel>
 
       <TabPanel value={value} index={5}>
