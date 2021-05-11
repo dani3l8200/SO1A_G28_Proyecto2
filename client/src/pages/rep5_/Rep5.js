@@ -8,23 +8,25 @@ import axios from "axios";
 import url from '../../shared/url';
 import React, { Component } from 'react';
 import CanvasJSReact from '../../assets/canvasjs.react';
-import Select from "@material-ui/core/Select";
-import Grid from '@material-ui/core/Grid';
-var CanvasJS = CanvasJSReact.CanvasJS;
+import { Bounce } from "react-awesome-reveal";
+
+import {
+    ZoomableGroup,
+    ComposableMap,
+    Geographies,
+    Geography
+} from "react-simple-maps";
+import Swal from 'sweetalert2'
+
+
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 class GraficaBarras extends Component {
     state = {
-        country_name: '',
+        geoUrl: "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json",
+        country_name: 'Guatemala',
         valores: [],
         paises: [{ location: 'Guatemala' }, { location: 'Brasil' }]
-    };
-
-    ManejadorRespuesta = async (e) => {
-        await this.setState({
-            [e.target.name]: e.target.value, // GUARDO EL VALOR DEL INPUT DE ACUERDO A SU NOMBRE
-        });
-        // ACA QUE HAGA LA BUSQUEDA
     };
 
 
@@ -71,23 +73,30 @@ class GraficaBarras extends Component {
                 formateado[9].y += data[i].count;
             }
         }
-
-
-
-
         await this.setState({ valores: formateado })
     }
+
+    async setCountrySearch(name) {  // POR CADA PAIS
+        Swal.fire({
+            position: 'top',
+            icon: 'success',
+            title: name,
+            showConfirmButton: false,
+            timer: 1500
+        })
+        await this.setState({ country_name:name })
+    }
+
 
     render() {
         const options = {
             title: {
-                text: "Vacunados por Rango de Edades"
+                text:"Vacunados por Rango de Edades en " + this.state.country_name 
             }, theme: "dark2", animationEnabled: true,
             exportFileName: "AgeGraph",
             exportEnabled: true,
             data: [
                 {
-
                     type: "column",
                     dataPoints: this.state.valores
                 }
@@ -95,59 +104,57 @@ class GraficaBarras extends Component {
         }
         return (
             <>
-                <Grid container spacing={8}>
-                    <Grid item md={12} xs={12} className="offset-2" >
+                  <Bounce>
+                <label className="col-form-label ">
+                Selecciona un Pais
+                </label>
+                </Bounce>
+                <div style={{ width: 800, height: 800  , marginBottom:0}}>
+                    <ComposableMap data-tip="" projectionConfig={{ scale: 200 }}>
+                        <ZoomableGroup>
+                            <Geographies geography={this.state.geoUrl}>
+                                {({ geographies }) =>
+                                    geographies.map((geo) => (
+                                        <Geography
+                                            key={geo.rsmKey}
+                                            geography={geo}
+                                            onClick={this.setCountrySearch.bind(this,geo.properties.NAME )}
+                                            onMouseEnter={() => {
 
-
-                        <div className="form-group negro" style={{ marginTop: 25, marginLeft: '20%' }}>
-
-                            <label className="col-form-label ">
-                                Selecciona un Pais
-                    </label>
-
-                            <Select
-                                name="country_name"
-                                style={{
-                                    width: "auto",
-                                    minWidth: '60%',
-                                    marginTop: 0,
-                                    marginLeft: 25,
-                                    marginBottom: 15,
-                                    background:'white',
-
-                                }}
-                                native
-                                value={this.state.country_name}
-                                onChange={this.ManejadorRespuesta.bind(this)}
-
-                            >
-                                {
-                                    this.state.paises.map((row) => (
-                                        <option key={row.location} value={row.location} style={{textAlign:'center'}}>   {row.location}   </option>
+                                            }}
+                                            onMouseLeave={() => {
+                                            }}
+                                            style={{
+                                                default: {
+                                                    fill: "#D6D6DA",
+                                                    outline: "none"
+                                                },
+                                                hover: {
+                                                    fill: "#F53",
+                                                    outline: "none"
+                                                },
+                                                pressed: {
+                                                    fill: "#E42",
+                                                    outline: "none"
+                                                }
+                                            }}
+                                        />
                                     ))
-
                                 }
-                            </Select>
+                            </Geographies>
+                        </ZoomableGroup>
+                    </ComposableMap>
+                </div>
 
 
 
-                        </div>
-
-
-
-
-
-                    </Grid>
-
-
-                </Grid>
-
-
-
-                <div className="col-8">
+                <div className="col-8" style={{marginTop:-100}}>
                     <CanvasJSChart options={options} />
                 </div>
 
+                <div style={{height:100}}>
+                 
+                </div>
             </>
         );
     }

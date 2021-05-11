@@ -24,15 +24,13 @@ export default class TableRep1 extends Component {
       titulos: this.props.titulos || ['name', 'location', 'gender', 'age', 'vaccine_type'],
       numConsulta: this.props.numConsulta || 1,
       consulta: this.props.consulta || [{ name: 'hola', location: 'guate', gender: 'macho', age: 78, vaccine_type: 'ok' }], // no se envia sino que se hace la peticion desde aca: :v
-      redis: this.props.redis || false,
-      mongo: this.props.mongo || false
     }
   }
 
   async componentDidMount() {
     // constructor
-    this.getConsulta();
-    this.hilo = setInterval(() =>{this.getConsulta();},2500);
+      this.getConsulta();
+      this.hilo = setInterval(() =>{this.getConsulta();},2500);
   }
 
   componentWillUnmount() {
@@ -41,6 +39,7 @@ export default class TableRep1 extends Component {
 
   async getConsulta() {
     //console.log('escuchando')
+    
     const ruta = url + "/consulta/"+this.state.numConsulta;
     const res = await axios.get(ruta);
     
