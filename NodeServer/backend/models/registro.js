@@ -1,7 +1,7 @@
 const {Schema , model } = require('mongoose');
 
 
-const mensajeSchema = new Schema(
+const registroSchema = new Schema(
     {
         name: {
             type: String,
@@ -11,20 +11,21 @@ const mensajeSchema = new Schema(
             type: String,
             required: true,
         },
+        gender: {
+            type: String,
+            required: true,
+        },
         age: {
-            type: Number
+            type: Number,
+            required: true,
         },
-        infectedtype: {
+        vaccine_type: {
             type: String,
             required: true,
         },
-        state: {
+        canal: { // por si acaso aunque no creo que lo use
             type: String,
-            required: true,
-        },
-        canal: {
-            type: String,
-            required: true,
+            required: false,
         },
         fecha:{ // para ordenarlos por fecha y traer los ultimos en las consultas
             type: Date,
@@ -33,4 +34,4 @@ const mensajeSchema = new Schema(
     }
 );
 
-module.exports =  model('Mensaje', mensajeSchema)
+module.exports =  model('registros', registroSchema)

@@ -14,6 +14,22 @@
     font-family: cursive;
 }
 
+.tabla_design{
+text-align: center;
+align-items: center;
+font-family: 'Times New Roman', Times, serif;
+background-image: url(./assets/fondo.jpg);
+background-repeat: no-repeat;
+background-size: 100% 100%;
+background-attachment: fixed;
+
+}
+
+thead{
+    color:white;
+}
+
+/*
 #vertical-tabpanel-0{
     background-image:  url(./assets/fondo.jpg);
         background-repeat: no-repeat;
@@ -105,4 +121,4 @@
 
   
   
-  
+  */

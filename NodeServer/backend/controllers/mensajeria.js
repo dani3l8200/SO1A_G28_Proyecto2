@@ -1,12 +1,12 @@
 const controller_mensajeria= {};
-const  mensajeSchema = require('../models/mensaje');
+const  registroSchema = require('../models/registro');
 
 controller_mensajeria.saveMsg = async (req,res)=>{
-    const nuevo = new mensajeSchema(req.body);
+    const nuevo = new registroSchema(req.body);
     console.log(nuevo)
     try {
         await nuevo.save();
-         res.status(200).json({text: 'mensaje almacenado'});// aca seria de hacer el filtrado
+         res.status(200).json({text: 'registro almacenado'});// aca seria de hacer el filtrado
      } catch (error) {
          res.status(500).json({Error: error});
      }
@@ -19,7 +19,7 @@ controller_mensajeria.test = async(req,res)=>{
 
 /*
 // para ver los datos
-mensajeSchema.find(function (err, mensajitos) {
+registroSchema.find(function (err, mensajitos) {
     if (err) return console.error(err)
     console.log(mensajitos)
 });

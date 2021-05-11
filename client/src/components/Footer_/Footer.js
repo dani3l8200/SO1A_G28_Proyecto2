@@ -9,17 +9,16 @@ export default  class Footer extends Component {
         this.state = {  }
     }
     componentDidMount(){
-        console.log("cosntructor")
+       // console.log("cosntructor")
     }
     render() { 
         return (  
             <>
             <Fade>
-            <div className="text-center p-3" style={{background: 'rgba(0, 0, 0, 0.2)'}}>
-                © 2020 Copyright:Grupo 28
+            <div className="text-center p-3" style={{ textAlign: 'center'}}>
+                © 2020 Copyright Grupo 28
       
             </div>
-           
             </Fade>
 
             </>
