@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-pub-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redispub
+  template:
+    metadata:
+      labels:
+        app: redispub
+    spec:
+      containers:
+      - name: redispub-container
+        image: gcr.io/nimble-courier-304504/pubredis
+        ports:
+        - containerPort: 6075

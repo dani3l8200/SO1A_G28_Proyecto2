@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-sub-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redissub
+  template:
+    metadata:
+      labels:
+        app: redissub
+    spec:
+      containers:
+      - name: redissub-container
+        image: gcr.io/nimble-courier-304504/subredis
+        ports:
+        - containerPort: 6075
