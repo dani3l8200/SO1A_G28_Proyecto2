@@ -35,6 +35,7 @@ consulta.get_ultimos_5 = async(req,res) => {// sin filtro alguno
         console.log("PAIS: ", pais)
         const registros = await registroSchema.find({location: pais}).sort({fecha:-1}).limit(5); // LOS DEVUELVE DESCENDENTE
         res.send(registros);// devuelve todos los mensajes
+  
     } catch (error) {
         console.log(error);
     }
@@ -51,6 +52,18 @@ consulta.getPie_rep3= async(req,res) =>{
         res.send(all_)
     }catch(error){
         console.log("error GET DATA GRAFICA PIE");
+    }
+}
+
+
+
+consulta.rangoEdades= async(req,res) =>{
+    try{
+        const all_ = await registroSchema.aggregate([{ "$group": {_id: "$age", count: {$sum:1}}} , {$sort: {"count": -1}}]);
+        res.send(all_);
+        console.log(all_)
+    }catch(error){
+        console.log("error getPorInfectedType");
     }
 }
 
@@ -108,14 +121,6 @@ consulta.ultimos5casos= async(req,res) =>{
 }
 
 
-consulta.rangoEdades= async(req,res) =>{
-    try{
-        const all_ = await registroSchema.aggregate([{ "$group": {_id: "$age", count: {$sum:1}}} , {$sort: {"count": -1}}]);
-        res.send(all_);
-        //console.log(all_)
-    }catch(error){
-        console.log("error getPorInfectedType");
-    }
-}
+
 
 module.exports =  consulta;

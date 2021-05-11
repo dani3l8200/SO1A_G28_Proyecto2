@@ -4,7 +4,13 @@
     pip3 install locust
 
 ## Como corre Locust 
-    locust -f filename.py 
+    Example: locust -f filename.py 
+    
+    ´´´bash
+    locust -f traffic.py 
+
+    ´´´
+  
 
 Si no se indica el url se coloca 
     

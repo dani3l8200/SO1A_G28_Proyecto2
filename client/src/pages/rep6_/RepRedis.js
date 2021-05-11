@@ -15,9 +15,16 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { Bounce, Zoom } from "react-awesome-reveal";
-
-import url from '../../shared/url';
 import axios from "axios";
+/*
+
+
+
+                            PARA REDIS
+
+
+
+*/
 
 
 export default class Rep4 extends Component {
@@ -26,10 +33,10 @@ export default class Rep4 extends Component {
         this.state = {
             geoUrl: "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json",
             country_name: 'Guatemala',
-            tituloReporte: 'Ultimos 5 Vacunados en ',
+            tituloReporte: 'Personas Vacunadas en ',
             titulos: ['name', 'location', 'gender', 'age', 'vaccine_type'],
-            numConsulta: 4,
             consulta: [], // no se envia sino que se hace la peticion desde aca: :v
+            urlRedis: ''
         }
     }
 
@@ -37,8 +44,7 @@ export default class Rep4 extends Component {
         // constructor
         this.getConsulta();
         this.hilo = setInterval(() => { this.getConsulta(); }, 2500);
-        await this.setState({ tituloReporte:  'Ultimos 5 Vacunados en '+this.state.country_name})
-
+        await this.setState({ tituloReporte:  'Personas Vacunadas en '+this.state.country_name})
     }
 
     componentWillUnmount() {
@@ -48,7 +54,7 @@ export default class Rep4 extends Component {
     async getConsulta() {
         //console.log('escuchando')
         if (this.state.country_name !== undefined){
-            const ruta = url + "/consulta/4/pais/"+this.state.country_name;
+            const ruta =  this.state.urlRedis+ "/"+this.state.country_name;
             const res = await axios.get(ruta);
             console.log(res);
             this.setState({ consulta: res.data });
@@ -68,7 +74,7 @@ export default class Rep4 extends Component {
             timer: 1500
         })
         await this.setState({ country_name: name })
-        await this.setState({ tituloReporte:  'Ultimos 5 Vacunados en '+this.state.country_name})
+        await this.setState({ tituloReporte:  'Personas Vacunadas en '+this.state.country_name})
         await this.getConsulta();
     }
     render() {
