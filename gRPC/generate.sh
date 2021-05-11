@@ -1,3 +1,3 @@
 #!/bin/bash
 
-protoc infected/infectedpb/infected.proto  --go_out=plugins=grpc:.
+protoc infected_cliente/infectedpb/infected.proto  --go_out=plugins=grpc:.

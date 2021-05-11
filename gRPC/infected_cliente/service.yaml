@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpc-client-service
+spec:
+  selector:
+    app: grpc-client
+  ports:
+    - port: 10000
+      targetPort: 10000
+  type: LoadBalancer

@@ -1,0 +1,11 @@
+FROM golang:1.16.4
+
+WORKDIR /go/src/redis-pub-sub
+
+COPY . /go/src/redis-pub-sub
+
+RUN go mod download 
+
+EXPOSE 6075
+
+CMD [ "go", "run", "pub.go" ]

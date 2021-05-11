@@ -20,11 +20,11 @@ const port int = 10000
 var validate *validator.Validate
 
 type InfectedInput struct {
-	Name         string `json:"name" validate:"required"`
-	Location     string `json:"location" validate:"required"`
-	Age          int32  `json:"age" validate:"required"`
-	InfectedType string `json:"infectedtype" validate:"required"`
-	State        string `json:"state" validate:"required"`
+	Name        string `json:"name" validate:"required"`
+	Location    string `json:"location" validate:"required"`
+	Gender      string `json:"gender" validate:"required"`
+	Age         int32  `json:"age" validate:"required"`
+	VaccineType string `json:"vaccine_type" validate:"required"`
 }
 
 func conexion(w http.ResponseWriter, r *http.Request) {
@@ -53,7 +53,7 @@ func conexion(w http.ResponseWriter, r *http.Request) {
 	// log.Infof("Received the following text to categorize: %s", infectedInput)
 
 	fmt.Println("Hello I'm a client")
-	cc, err := grpc.Dial("server:50051", grpc.WithInsecure())
+	cc, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
 
 	if err != nil {
 		log.Fatalf("Could not connect: %v", err)
@@ -100,11 +100,11 @@ func main() {
 func doUnary(c infectedpb.InfectedServiceClient, data InfectedInput) {
 	req := &infectedpb.InfectedRequest{
 		Infected: &infectedpb.Infected{
-			Name:         data.Name,
-			Location:     data.Location,
-			Age:          data.Age,
-			Infectedtype: data.InfectedType,
-			State:        data.State,
+			Name:        data.Name,
+			Location:    data.Location,
+			Gender:      data.Gender,
+			Age:         data.Age,
+			VaccineType: data.VaccineType,
 		},
 	}
 	res, err := c.Infected(context.Background(), req)
