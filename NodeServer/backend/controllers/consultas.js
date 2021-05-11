@@ -31,7 +31,9 @@ consulta.get_all_registros = async(req,res) => {// sin filtro alguno
 
 consulta.get_ultimos_5 = async(req,res) => {// sin filtro alguno
     try {
-        const registros = await registroSchema.find().sort({fecha:-1}).limit(5); // LOS DEVUELVE DESCENDENTE
+        const {pais} = req.params;
+        console.log("PAIS: ", pais)
+        const registros = await registroSchema.find({location: pais}).sort({fecha:-1}).limit(5); // LOS DEVUELVE DESCENDENTE
         res.send(registros);// devuelve todos los mensajes
     } catch (error) {
         console.log(error);
@@ -42,9 +44,11 @@ consulta.get_ultimos_5 = async(req,res) => {// sin filtro alguno
 
 consulta.getPie_rep3= async(req,res) =>{
     try{
-        const all_ = await registroSchema.aggregate([{ "$group": {_id: "$gender", count: {$sum:1}}} , {$sort: {"count": -1}}]);
-        res.send(all_)
+        const {pais} = req.params;
+       console.log("pais",pais)
+        const all_ = await registroSchema.aggregate([   {$match: { "location": { $eq: pais } }},{ "$group": {_id: "$gender",count: {$sum:1}}} , {$sort: {"count": -1} }  ]  ) ;
         console.log(all_)
+        res.send(all_)
     }catch(error){
         console.log("error GET DATA GRAFICA PIE");
     }

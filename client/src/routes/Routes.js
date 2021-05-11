@@ -1,9 +1,8 @@
 
 import React from 'react';
-import Footer from '../components/Footer_/Footer';
 import Main_ from '../pages/Main/Main';
 
-import {BrowserRouter , Switch, Route, Link} from 'react-router-dom';// npm i react-router-dom
+import {BrowserRouter , Switch, Route, /*Link*/} from 'react-router-dom';// npm i react-router-dom
 
 function Routes() {
   return (

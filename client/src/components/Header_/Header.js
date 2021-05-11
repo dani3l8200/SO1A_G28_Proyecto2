@@ -21,7 +21,7 @@ import Rep3 from '../../pages/rep3_/Rep3';
 import Rep4 from '../../pages/rep4_/Rep4';
 import Rep5 from '../../pages/rep5_/Rep5';
 import './Header.css';
-import PublicOutlinedIcon from '@material-ui/icons/PublicOutlined';
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -71,7 +71,7 @@ export default function ScrollableTabsButtonForce() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const mensaje = "Grupo 28";
+  const mensaje = "G28";
 
   return (
     <div className={classes.root}>
@@ -93,10 +93,10 @@ export default function ScrollableTabsButtonForce() {
           <Tab label="Gráfica de pie de los géneros de los vacunados por país, en MongoDB" icon={< WcOutlinedIcon/>} {...a11yProps(2)} />
           <Tab label="Los últimos cinco vacunados almacenados por país, en MongoDB." icon={<PeopleAltRoundedIcon />} {...a11yProps(3)} />
           <Tab label="Gráfica de barras del rango de edades (de diez en diez) por cada país, en Redis" icon={< HealingRoundedIcon/>} {...a11yProps(4)} />
-          <Tab label="Mapa interactivo" icon={<PublicOutlinedIcon />} {...a11yProps(5)} />
+
          
           
-    
+          <p>{mensaje}</p>
 
         </Tabs>
       </AppBar>
@@ -139,10 +139,6 @@ export default function ScrollableTabsButtonForce() {
         </div>
       </TabPanel>
 
-      <TabPanel value={value} index={5}>
-       
-       
-      </TabPanel>
 
     </div>
   );
