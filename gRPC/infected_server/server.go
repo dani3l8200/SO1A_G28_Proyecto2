@@ -17,12 +17,12 @@ import (
 type server struct{}
 
 type InfectedOutput struct {
-	Name         string `json:"name,omitempty"`     //para ser mas explicito de lo que espero recibir
-	Location     string `json:"location,omitempty"` // nombre como lo espero ,  caracteristica no nulo
-	Age          int32  `json:"age,omitempty"`
-	Infectedtype string `json:"infectedtype,omitempty"`
-	State        string `json:"state,omitempty"`
-	Canal        string `json:"canal"`
+	Name        string `json:"name" validate:"required"`
+	Location    string `json:"location" validate:"required"`
+	Gender      string `json:"gender" validate:"required"`
+	Age         int32  `json:"age" validate:"required"`
+	VaccineType string `json:"vaccine_type" validate:"required"`
+	Canal       string `json:"canal"`
 }
 
 func ImprimirMensaje(m InfectedOutput) {
@@ -30,7 +30,7 @@ func ImprimirMensaje(m InfectedOutput) {
 	var msg InfectedOutput
 	data, err := json.Marshal(m)
 	if err != nil {
-		fmt.Printf("Error decodificando: %v",err)
+		fmt.Printf("Error decodificando: %v", err)
 		return
 	}
 	err = json.Unmarshal(data, &msg)
@@ -40,13 +40,20 @@ func ImprimirMensaje(m InfectedOutput) {
 		fmt.Printf("Error decodificando: %v\n", err)
 		return
 	} else {
-		// lo mando
+		// Mongo
 		datos := strings.NewReader(string(data))
 		res, err := http.Post("http://35.239.78.64/mensajeria", "application/json; charset=UTF-8", datos)
 		if err != nil {
 			log.Fatal(err)
 		}
 		defer res.Body.Close()
+
+		// REDIS
+		res2, err := http.Post("http://35.239.78.64/mensajeria", "application/json; charset=UTF-8", datos)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer res2.Body.Close()
 	}
 
 	// obj_msg_sender, _ := json.Marshal(cadena)
@@ -59,12 +66,12 @@ func (*server) Infected(ctx context.Context, req *infectedpb.InfectedRequest) (*
 	fmt.Println()
 	name := req.GetInfected().GetName()
 	location := req.GetInfected().GetLocation()
+	gender := req.GetInfected().GetGender()
 	age := req.GetInfected().GetAge()
-	infectedType := req.GetInfected().GetInfectedtype()
-	state := req.GetInfected().GetState()
-	data := InfectedOutput{Name: name, Location: location, Age: age, Infectedtype: infectedType, State: state, Canal: "gRPC"}
+	vaccine_type := req.GetInfected().GetVaccineType()
+	data := InfectedOutput{Name: name, Location: location, Gender: gender, Age: age, VaccineType: vaccine_type, Canal: "gRPC"}
 	ImprimirMensaje(data)
-	result := "Hello nombre: " + name + "\nlocation: " + location + "\nedad: " + strconv.FormatInt(int64(age), 10) + "\ntipo infectado: " + infectedType + "\nestado:" + state
+	result := "Hello nombre: " + name + "\nlocation: " + location + "\nedad: " + strconv.FormatInt(int64(age), 10) + "\nGenero: " + gender + "\nTipo Vacuna:" + vaccine_type
 	res := &infectedpb.InfectedResponse{
 		Result: result,
 	}
@@ -89,4 +96,5 @@ func main() {
 		log.Fatalf("failed to server %v", err)
 	}
 }
+
 
