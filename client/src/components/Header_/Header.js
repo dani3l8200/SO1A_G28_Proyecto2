@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
 import StorageIcon from '@material-ui/icons/Storage';
-
+import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
 import WcOutlinedIcon from '@material-ui/icons/WcOutlined';
 import HealingIcon from '@material-ui/icons/LocalHospitalRounded';
 import Rep1 from '../../pages/rep1_/Rep1';
@@ -20,6 +20,7 @@ import Rep2 from '../../pages/rep2_/Rep2';
 import Rep3 from '../../pages/rep3_/Rep3';
 import Rep4 from '../../pages/rep4_/Rep4';
 import Rep5 from '../../pages/rep5_/Rep5';
+import Rep6 from '../../pages/rep6_/RepRedis';
 import './Header.css';
 
 
@@ -93,8 +94,8 @@ export default function ScrollableTabsButtonForce() {
           <Tab label="Gráfica de pie de los géneros de los vacunados por país, en MongoDB" icon={< WcOutlinedIcon/>} {...a11yProps(2)} />
           <Tab label="Los últimos cinco vacunados almacenados por país, en MongoDB." icon={<PeopleAltRoundedIcon />} {...a11yProps(3)} />
           <Tab label="Gráfica de barras del rango de edades (de diez en diez) por cada país, en Redis" icon={< HealingRoundedIcon/>} {...a11yProps(4)} />
-
-         
+          <Tab label="Personas vacunadas por cada país, en Redis" icon={< PeopleOutlineIcon/>} {...a11yProps(5)} />
+          
           
           <p>{mensaje}</p>
 
@@ -138,6 +139,13 @@ export default function ScrollableTabsButtonForce() {
         <Rep5/>
         </div>
       </TabPanel>
+
+      <TabPanel value={value} index={5}>
+        
+        <div className="fondo">
+          <Rep6/>
+          </div>
+        </TabPanel>
 
 
     </div>
