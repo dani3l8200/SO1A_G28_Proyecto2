@@ -18,7 +18,8 @@ import { Bounce, Zoom } from "react-awesome-reveal";
 
 import url from '../../shared/url';
 import axios from "axios";
-
+import Select from "@material-ui/core/Select";
+import Grid from '@material-ui/core/Grid';
 
 export default class Rep4 extends Component {
     constructor(props) {
@@ -91,7 +92,7 @@ export default class Rep4 extends Component {
                                         <Geography
                                             key={geo.rsmKey}
                                             geography={geo}
-                                            onClick={this.setCountrySearch.bind(this, geo.properties.NAME)}
+                                            onClick={this.setCountrySearch.bind(this, geo.properties.NAME_LONG)}
                                             onMouseEnter={() => {
 
                                             }}
@@ -99,7 +100,7 @@ export default class Rep4 extends Component {
                                             }}
                                             style={{
                                                 default: {
-                                                    fill: "#D6D6DA",
+                                                    fill: "#00283d",
                                                     outline: "none"
                                                 },
                                                 hover: {

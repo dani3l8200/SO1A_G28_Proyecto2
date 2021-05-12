@@ -11,8 +11,8 @@ import {
 } from "react-simple-maps";
 import Swal from 'sweetalert2'
 import { Bounce } from "react-awesome-reveal";
-
-
+import Select from "@material-ui/core/Select";
+import Grid from '@material-ui/core/Grid';
 
 
 
@@ -21,13 +21,14 @@ class GraficaCircular extends Component {
     state = {
         valores: [],
         geoUrl: "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json",
-        country_name:'Guatemala'
+        country_name: 'Guatemala',
+        paises: []
     };
 
 
 
     async getDataPie() {
-        const ruta = url + "/consulta/3/pais/"+this.state.country_name;
+        const ruta = url + "/consulta/3/pais/" + this.state.country_name;
         const res = await axios.get(ruta);
         let data = res.data;
         let formateado = [];
@@ -43,9 +44,26 @@ class GraficaCircular extends Component {
     }
     async componentDidMount() { // es como un constructor
 
+        const res = await axios.get('https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json');
+        console.log("GEOGRAFIA", res.data.objects.ne_110m_admin_0_countries.geometries)
+        let paises_api = res.data.objects.ne_110m_admin_0_countries.geometries;
+        let paises_ = [];
+        paises_api.forEach(element => {
+            paises_.push(element.properties.NAME_LONG);
+        });
+
+        await this.setState({ paises: paises_ })
         this.getDataPie();
         this.hilo = setInterval(() => { this.getDataPie(); }, 2500);
     }
+
+    ManejadorSearch = async (e) => {
+        await this.setState({
+            [e.target.name]: e.target.value, // GUARDO EL VALOR DEL INPUT DE ACUERDO A SU NOMBRE
+        });
+        // ACA QUE HAGA LA BUSQUEDA
+        this.getDataPie();
+    };
 
     componentWillUnmount() {
         clearInterval(this.hilo);
@@ -59,7 +77,7 @@ class GraficaCircular extends Component {
             showConfirmButton: false,
             timer: 1500
         })
-        await this.setState({ country_name:name });
+        await this.setState({ country_name: name });
         this.getDataPie();
     }
     render() {
@@ -87,10 +105,12 @@ class GraficaCircular extends Component {
         return (
             <>
                 <Bounce>
-                <label className="col-form-label ">
-                    Selecciona un Pais
+                    <label className="col-form-label ">
+                        Selecciona un Pais
                 </label>
                 </Bounce>
+
+
 
                 <div style={{ width: 800, height: 800, marginBottom: 0 }}>
                     <ComposableMap data-tip="" projectionConfig={{ scale: 200 }}>
@@ -98,10 +118,12 @@ class GraficaCircular extends Component {
                             <Geographies geography={this.state.geoUrl}>
                                 {({ geographies }) =>
                                     geographies.map((geo) => (
+
                                         <Geography
+
                                             key={geo.rsmKey}
                                             geography={geo}
-                                            onClick={this.setCountrySearch.bind(this, geo.properties.NAME)}
+                                            onClick={this.setCountrySearch.bind(this, geo.properties.NAME_LONG)}
                                             onMouseEnter={() => {
 
                                             }}
@@ -109,7 +131,7 @@ class GraficaCircular extends Component {
                                             }}
                                             style={{
                                                 default: {
-                                                    fill: "#D6D6DA",
+                                                    fill: "#00283d",
                                                     outline: "none"
                                                 },
                                                 hover: {
@@ -128,15 +150,43 @@ class GraficaCircular extends Component {
                         </ZoomableGroup>
                     </ComposableMap>
                 </div>
+                <Grid container spacing={8}>
+                    <Grid item md={12} xs={12} className="offset-2" >
+                        <div className="form-group negro" style={{ marginTop: 25, marginLeft: '20%' }}>
+                            <label className="col-form-label ">Selecciona un Pais</label>
+                            <Select
+                                name="country_name"
+                                style={{
+                                    width: "auto",
+                                    minWidth: '60%',
+                                    marginTop: 0,
+                                    marginLeft: 25,
+                                    marginBottom: 15,
+                                    background: 'white',
 
+                                }}
+                                native
+                                value={this.state.country_name}
+                                onChange={this.ManejadorSearch.bind(this)}
 
-                <div className="col-8" style={{marginTop:-100}}>
+                            >
+                                {
+                                    this.state.paises.map((row) => (
+                                        <option key={row} value={row} style={{ textAlign: 'center' }}>   {row}   </option>
+                                    ))
+
+                                }
+                            </Select>
+                        </div>
+                    </Grid>
+                </Grid>
+
+                <div className="col-8" style={{ marginTop: 0 }}>
                     <CanvasJSChart options={controller} />
                 </div>
-
-                <div style={{height:100}}>
-                 
-                 </div>
+           
+                <div style={{ height: 100 }}>
+                </div>
             </>
         );
     }

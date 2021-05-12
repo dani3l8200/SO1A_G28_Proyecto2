@@ -3,12 +3,12 @@ const  registroSchema = require('../models/registro');
 
 controller_mensajeria.saveMsg = async (req,res)=>{
     const nuevo = new registroSchema(req.body);
-    console.log(nuevo)
+    console.log("llego " , req.body)
     try {
         await nuevo.save();
-         res.status(200).json({text: 'registro almacenado'});// aca seria de hacer el filtrado
+        res.status(200).json({text: 'registro almacenado'});// aca seria de hacer el filtrado
      } catch (error) {
-         res.status(500).json({Error: error});
+        res.status(505).json({Error: error});
      }
 }
 

@@ -14,7 +14,7 @@ export default  class Rep2  extends Component {
     render() { 
         return ( 
             <>
-                <TableDataMongo tituloReporte={'TOP 10 PAISES CON MAS VACUNADOS'} redis={true} urlRedis={''} titulos={['pais' , 'cantidad vacunados']} /> 
+                <TableDataMongo tituloReporte={'TOP 10 PAISES CON MAS VACUNADOS'} redis={true} urlRedis={'https://us-central1-deft-set-312418.cloudfunctions.net/rep-pais-totvac'} titulos={['pais' , 'vacunados']} /> 
                 {/* ESTE ES CON REDIS*/}
             </>
          );

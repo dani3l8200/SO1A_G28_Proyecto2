@@ -16,6 +16,8 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { Bounce, Zoom } from "react-awesome-reveal";
 import axios from "axios";
+import Select from "@material-ui/core/Select";
+import Grid from '@material-ui/core/Grid';
 /*
 
 
@@ -36,14 +38,14 @@ export default class Rep4 extends Component {
             tituloReporte: 'Personas Vacunadas en ',
             titulos: ['name', 'location', 'gender', 'age', 'vaccine_type'],
             consulta: [], // no se envia sino que se hace la peticion desde aca: :v
-            urlRedis: ''
+            urlRedis: 'https://us-central1-deft-set-312418.cloudfunctions.net/rep-pais-vacunados'
         }
     }
 
     async componentDidMount() {
         // constructor
-        this.getConsulta();
-        this.hilo = setInterval(() => { this.getConsulta(); }, 2500);
+        this.getConsulta(); 
+        this.hilo = setInterval(() => { this.getConsulta(); }, 3500);
         await this.setState({ tituloReporte:  'Personas Vacunadas en '+this.state.country_name})
     }
 
@@ -52,14 +54,29 @@ export default class Rep4 extends Component {
     }
 
     async getConsulta() {
-        //console.log('escuchando')
-        if (this.state.country_name !== undefined){
-            const ruta =  this.state.urlRedis+ "/"+this.state.country_name;
-            const res = await axios.get(ruta);
-            console.log(res);
-            this.setState({ consulta: res.data });
+
+        if (this.state.country_name !== undefined){ 
+            await axios.get(this.state.urlRedis , {headers : {
+                'pais' : this.state.country_name
+              }}).then( async (res)=>{
+
+                  if(res.data[this.state.country_name] != undefined  ){
+                    await this.setState({ consulta: res.data[this.state.country_name] });
+                  }else{
+                    await this.setState({consulta: []});
+                  }
+              }).catch( (err) => { console.log(err); this.setState({consulta: []});  });
         }
     }
+
+    ManejadorSearch = async (e) => {
+        await this.setState({
+            [e.target.name]: e.target.value, // GUARDO EL VALOR DEL INPUT DE ACUERDO A SU NOMBRE
+        });
+        // ACA QUE HAGA LA BUSQUEDA
+        this.getConsulta();
+    };
+
 
 
 
@@ -74,8 +91,9 @@ export default class Rep4 extends Component {
             timer: 1500
         })
         await this.setState({ country_name: name })
-        await this.setState({ tituloReporte:  'Personas Vacunadas en '+this.state.country_name})
         await this.getConsulta();
+        await this.setState({ tituloReporte:  'Personas Vacunadas en '+this.state.country_name})
+     
     }
     render() {
         return (
@@ -97,7 +115,7 @@ export default class Rep4 extends Component {
                                         <Geography
                                             key={geo.rsmKey}
                                             geography={geo}
-                                            onClick={this.setCountrySearch.bind(this, geo.properties.NAME)}
+                                            onClick={this.setCountrySearch.bind(this, geo.properties.NAME_LONG)}
                                             onMouseEnter={() => {
 
                                             }}
@@ -105,7 +123,7 @@ export default class Rep4 extends Component {
                                             }}
                                             style={{
                                                 default: {
-                                                    fill: "#D6D6DA",
+                                                    fill: "#00283d",
                                                     outline: "none"
                                                 },
                                                 hover: {
@@ -162,7 +180,7 @@ export default class Rep4 extends Component {
 
                                 </TableHead>
                                 <TableBody>
-                                    {this.state.consulta.map((row, index) => (
+                                    { this.state.consulta.map((row, index) => (
                                         <TableRow key={row.name}>
                                             <TableCell align="center" className="text-black">{index + 1}</TableCell>
                                             {this.state.titulos.map((titulo) => (
