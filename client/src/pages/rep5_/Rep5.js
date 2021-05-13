@@ -17,7 +17,8 @@ import {
     Geography
 } from "react-simple-maps";
 import Swal from 'sweetalert2'
-
+import Select from "@material-ui/core/Select";
+import Grid from '@material-ui/core/Grid';
 
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
@@ -26,12 +27,13 @@ class GraficaBarras extends Component {
         geoUrl: "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json",
         country_name: 'Guatemala',
         valores: [],
-        paises: [{ location: 'Guatemala' }, { location: 'Brasil' }],
-        urlRedis: 'https://us-central1-deft-set-312418.cloudfunctions.net/rep-pais-edades'
+        urlRedis: 'https://us-central1-deft-set-312418.cloudfunctions.net/rep-pais-edades',
+        paises: []
     };
 
 
     async componentDidMount() { // es como un constructor
+        this.llenarPaises();
         this.getPorEdadPorPais();
         this.hilo = setInterval(() => { this.getPorEdadPorPais(); }, 2500);
     }
@@ -41,7 +43,25 @@ class GraficaBarras extends Component {
         clearInterval(this.hilo);
     }
 
+    ManejadorSearch = async (e) => {
+        await this.setState({
+            [e.target.name]: e.target.value, // GUARDO EL VALOR DEL INPUT DE ACUERDO A SU NOMBRE
+        });
+        // ACA QUE HAGA LA BUSQUEDA
+        this.getPorEdadPorPais();
+    };
 
+    async llenarPaises(){
+        const res = await axios.get('https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json');
+        console.log("GEOGRAFIA", res.data.objects.ne_110m_admin_0_countries.geometries)
+        let paises_api = res.data.objects.ne_110m_admin_0_countries.geometries;
+        let paises_ = [];
+        paises_api.forEach(element => {
+            paises_.push(element.properties.NAME_LONG);
+        });
+        await this.setState({ paises: paises_ });
+    
+    }
     async getPorEdadPorPais() {  // POR CADA PAIS
 
     
@@ -192,11 +212,43 @@ class GraficaBarras extends Component {
 
 
 
-                <div className="col-8" style={{ marginTop: -100 }}>
+
+                <Grid container spacing={7}>
+                    <Grid item md={12} xs={12} className="offset-2" >
+                        <div className="form-group negro" style={{ marginTop: 25, marginLeft: '25%' }}>
+                            <label className="col-form-label ">Selecciona un Pais</label>
+                            <Select
+                                name="country_name"
+                                style={{
+                                    width: "auto",
+                                    minWidth: '47%',
+                                    marginTop: 0,
+                                    marginLeft: 25,
+                                    marginBottom: 15,
+                                    background: 'white',
+
+                                }}
+                                native
+                                value={this.state.country_name}
+                                onChange={this.ManejadorSearch.bind(this)}
+
+                            >
+                                {
+                                    this.state.paises.map((row) => (
+                                        <option key={row} value={row} style={{ textAlign: 'center' }}>   {row}   </option>
+                                    ))
+
+                                }
+                            </Select>
+                        </div>
+                    </Grid>
+                </Grid>
+
+                <div className="col-8" style={{ marginTop: 0 }}>
                     <CanvasJSChart options={options} />
                 </div>
 
-                <div style={{ height: 100 }}>
+                <div style={{ height: 400 }}>
 
                 </div>
             </>

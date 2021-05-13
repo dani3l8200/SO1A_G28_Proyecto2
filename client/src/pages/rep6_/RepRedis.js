@@ -38,16 +38,35 @@ export default class Rep4 extends Component {
             tituloReporte: 'Personas Vacunadas en ',
             titulos: ['name', 'location', 'gender', 'age', 'vaccine_type'],
             consulta: [], // no se envia sino que se hace la peticion desde aca: :v
-            urlRedis: 'https://us-central1-deft-set-312418.cloudfunctions.net/rep-pais-vacunados'
+            urlRedis: 'https://us-central1-deft-set-312418.cloudfunctions.net/rep-pais-vacunados',
+            paises: []
         }
     }
 
     async componentDidMount() {
         // constructor
+        this.llenarPaises();
         this.getConsulta(); 
         this.hilo = setInterval(() => { this.getConsulta(); }, 3500);
         await this.setState({ tituloReporte:  'Personas Vacunadas en '+this.state.country_name})
     }
+    async llenarPaises(){
+        const res = await axios.get('https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json');
+        console.log("GEOGRAFIA", res.data.objects.ne_110m_admin_0_countries.geometries)
+        let paises_api = res.data.objects.ne_110m_admin_0_countries.geometries;
+        let paises_ = [];
+        paises_api.forEach(element => {
+            paises_.push(element.properties.NAME_LONG);
+        });
+        await this.setState({ paises: paises_ })
+    }
+
+    ManejadorSearch = async (e) => {
+        await this.setState({
+            [e.target.name]: e.target.value, // GUARDO EL VALOR DEL INPUT DE ACUERDO A SU NOMBRE
+        });
+        this.llenarPaises();
+    };
 
     componentWillUnmount() {
         clearInterval(this.hilo);
@@ -74,7 +93,9 @@ export default class Rep4 extends Component {
             [e.target.name]: e.target.value, // GUARDO EL VALOR DEL INPUT DE ACUERDO A SU NOMBRE
         });
         // ACA QUE HAGA LA BUSQUEDA
+        await this.setState({ tituloReporte:  'Personas Vacunadas en '+this.state.country_name})
         this.getConsulta();
+    
     };
 
 
@@ -148,12 +169,38 @@ export default class Rep4 extends Component {
 
 
 
+                <Grid container spacing={8}>
+                    <Grid item md={12} xs={12} className="offset-2" >
+                        <div className="form-group negro" style={{ marginTop: 25, marginLeft: '25%' }}>
+                            <label className="col-form-label ">Selecciona un Pais</label>
+                            <Select
+                                name="country_name"
+                                style={{
+                                    width: "auto",
+                                    minWidth: '46%',
+                                    marginTop: 0,
+                                    marginLeft: 25,
+                                    marginBottom: 15,
+                                    background: 'white',
 
-                <div style={{ height: 100 }}>
+                                }}
+                                native
+                                value={this.state.country_name}
+                                onChange={this.ManejadorSearch.bind(this)}
 
-                </div>
+                            >
+                                {
+                                    this.state.paises.map((row) => (
+                                        <option key={row} value={row} style={{ textAlign: 'center' }}>   {row}   </option>
+                                    ))
 
-                <div style={{ marginTop: -300 }}>
+                                }
+                            </Select>
+                        </div>
+                    </Grid>
+                </Grid>
+
+                <div style={{ marginTop: 0}}>
 
                     <Bounce left>
                         <h2 style={{ textAlign: 'center' }}>{this.state.tituloReporte}</h2>
@@ -195,7 +242,7 @@ export default class Rep4 extends Component {
 
                 </div>
 
-                <div style={{ height: 100 }}>
+                <div style={{ height: 400 }}>
 
                 </div>
             </>

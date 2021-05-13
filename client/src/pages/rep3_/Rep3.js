@@ -44,6 +44,12 @@ class GraficaCircular extends Component {
     }
     async componentDidMount() { // es como un constructor
 
+        this.llenarPaises();
+        this.getDataPie();
+        this.hilo = setInterval(() => { this.getDataPie(); }, 2500);
+    }
+
+    async llenarPaises(){
         const res = await axios.get('https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json');
         console.log("GEOGRAFIA", res.data.objects.ne_110m_admin_0_countries.geometries)
         let paises_api = res.data.objects.ne_110m_admin_0_countries.geometries;
@@ -51,10 +57,7 @@ class GraficaCircular extends Component {
         paises_api.forEach(element => {
             paises_.push(element.properties.NAME_LONG);
         });
-
         await this.setState({ paises: paises_ })
-        this.getDataPie();
-        this.hilo = setInterval(() => { this.getDataPie(); }, 2500);
     }
 
     ManejadorSearch = async (e) => {
@@ -185,7 +188,7 @@ class GraficaCircular extends Component {
                     <CanvasJSChart options={controller} />
                 </div>
            
-                <div style={{ height: 100 }}>
+                <div style={{ height: 400 }}>
                 </div>
             </>
         );
