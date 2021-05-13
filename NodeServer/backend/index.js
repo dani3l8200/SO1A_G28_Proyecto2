@@ -6,6 +6,13 @@ const morgan = require('morgan');
 
 const { router } = require('./rutas/rutas');
 
+/*
+COMANDO PARA FUNARSE EL NODE 
+
+killall node
+
+*/
+
 //modulo de express
 app = express();
 
@@ -15,7 +22,7 @@ dbConnection();
 
 
 
-app.set('port', process.env.PORT || 4000)
+app.set('port', process.env.PORT || 3000)
 
 //middlawares 
 app.use(cors());

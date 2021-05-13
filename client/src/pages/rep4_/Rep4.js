@@ -18,7 +18,8 @@ import { Bounce, Zoom } from "react-awesome-reveal";
 
 import url from '../../shared/url';
 import axios from "axios";
-
+import Select from "@material-ui/core/Select";
+import Grid from '@material-ui/core/Grid';
 
 export default class Rep4 extends Component {
     constructor(props) {
@@ -30,16 +31,41 @@ export default class Rep4 extends Component {
             titulos: ['name', 'location', 'gender', 'age', 'vaccine_type'],
             numConsulta: 4,
             consulta: [], // no se envia sino que se hace la peticion desde aca: :v
+            paises: []
         }
     }
 
     async componentDidMount() {
         // constructor
+        this.llenarPaises();
         this.getConsulta();
         this.hilo = setInterval(() => { this.getConsulta(); }, 2500);
         await this.setState({ tituloReporte:  'Ultimos 5 Vacunados en '+this.state.country_name})
 
     }
+    
+
+    ManejadorSearch = async (e) => {
+        await this.setState({
+            [e.target.name]: e.target.value, // GUARDO EL VALOR DEL INPUT DE ACUERDO A SU NOMBRE
+        });
+        // ACA QUE HAGA LA BUSQUEDA
+        this.getConsulta();
+        await this.setState({ tituloReporte:  'Ultimos 5 Vacunados en '+this.state.country_name});
+    };
+
+    async llenarPaises(){
+        const res = await axios.get('https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json');
+        console.log("GEOGRAFIA", res.data.objects.ne_110m_admin_0_countries.geometries)
+        let paises_api = res.data.objects.ne_110m_admin_0_countries.geometries;
+        let paises_ = [];
+        paises_api.forEach(element => {
+            paises_.push(element.properties.NAME_LONG);
+        });
+        await this.setState({ paises: paises_ });
+    
+    }
+
 
     componentWillUnmount() {
         clearInterval(this.hilo);
@@ -91,7 +117,7 @@ export default class Rep4 extends Component {
                                         <Geography
                                             key={geo.rsmKey}
                                             geography={geo}
-                                            onClick={this.setCountrySearch.bind(this, geo.properties.NAME)}
+                                            onClick={this.setCountrySearch.bind(this, geo.properties.NAME_LONG)}
                                             onMouseEnter={() => {
 
                                             }}
@@ -99,7 +125,7 @@ export default class Rep4 extends Component {
                                             }}
                                             style={{
                                                 default: {
-                                                    fill: "#D6D6DA",
+                                                    fill: "#00283d",
                                                     outline: "none"
                                                 },
                                                 hover: {
@@ -125,11 +151,40 @@ export default class Rep4 extends Component {
 
 
 
-                <div style={{ height: 100 }}>
+         
+                <Grid container spacing={7}>
+                    <Grid item md={12} xs={12} className="offset-2" >
+                        <div className="form-group negro" style={{ marginTop: 25, marginLeft: '25%' }}>
+                            <label className="col-form-label ">Selecciona un Pais</label>
+                            <Select
+                                name="country_name"
+                                style={{
+                                    width: "auto",
+                                    minWidth: '47%',
+                                    marginTop: 0,
+                                    marginLeft: 25,
+                                    marginBottom: 15,
+                                    background: 'white',
 
-                </div>
+                                }}
+                                native
+                                value={this.state.country_name}
+                                onChange={this.ManejadorSearch.bind(this)}
 
-                <div style={{ marginTop: -300 }}>
+                            >
+                                {
+                                    this.state.paises.map((row) => (
+                                        <option key={row} value={row} style={{ textAlign: 'center' }}>   {row}   </option>
+                                    ))
+
+                                }
+                            </Select>
+                        </div>
+                    </Grid>
+                </Grid>
+
+
+                <div style={{ marginTop: 0 }}>
 
                     <Bounce left>
                         <h2 style={{ textAlign: 'center' }}>{this.state.tituloReporte}</h2>
@@ -171,7 +226,7 @@ export default class Rep4 extends Component {
 
                 </div>
 
-                <div style={{ height: 100 }}>
+                <div style={{ height: 400 }}>
 
                 </div>
             </>

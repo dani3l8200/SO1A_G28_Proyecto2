@@ -41,8 +41,14 @@ export default class TableRep1 extends Component {
 
   async getConsulta() {
     //console.log('escuchando')
-    if (this.state.redis){
-
+    if (this.state.redis ===  true){
+      const res = await axios.get(this.state.urlRedis);
+      let top = [];
+/*      for (let i = 0; i < res.data.length && res.data; i++) {
+        top.push(res.data[i])
+      }*/
+      console.log("FALTA TOP", res);
+      this.setState({ consulta: res.data });
     }else{
       const ruta = url + "/consulta/"+this.state.numConsulta;
       const res = await axios.get(ruta);
