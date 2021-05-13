@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const dbConnection = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_LISTEN, // PONER MONGO_LOCAL  en el commit final
+        await mongoose.connect(process.env.MONGO_LOCAL, // PONER MONGO_LOCAL  en el commit final
             {
                 useCreateIndex: true,
                 useNewUrlParser: true,
