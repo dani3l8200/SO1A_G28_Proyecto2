@@ -1,0 +1,35 @@
+metadata:
+  name: api-dummy
+  namespace: project
+spec:
+  selector:
+    matchLabels:
+      run: api-dummy
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: api-dummy
+    spec:
+      containers:
+      - image: busybox
+        command:
+          - sleep
+          - "3600"
+        imagePullPolicy: IfNotPresent
+        name: busybox
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-service
+  namespace: project
+  labels:
+    run: api-dummy
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    run: api-dummy
