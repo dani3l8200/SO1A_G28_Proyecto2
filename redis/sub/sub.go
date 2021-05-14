@@ -15,31 +15,26 @@ import (
 var ctx = context.Background()
 
 type InfectedInput struct {
-	Name        string `json:"name" validate:"required"`
-	Location    string `json:"location" validate:"required"`
-	Gender      string `json:"gender" validate:"required"`
-	Age         int32  `json:"age" validate:"required"`
-	VaccineType string `json:"vaccine_type" validate:"required"`
+	Name        string      `json:"name" validate:"required"`
+	Location    string      `json:"location" validate:"required"`
+	Gender      string      `json:"gender" validate:"required"`
+	Age         json.Number `json:"age" validate:"required"`
+	VaccineType string      `json:"vaccine_type" validate:"required"`
 }
 
 func ImprimirMensaje(m *redis.Message) {
-	// cadena := string(m.Payload)
-	var msg InfectedInput
-	data, err := json.Marshal(m.Payload)
-
+	cadena := string([]byte(m.Payload))
+	// var msg InfectedInput
+	data, err := json.Marshal(cadena)
+	
 	if err != nil {
-		fmt.Printf("Error decodificando: %v", err)
-		return
-	}
-	err = json.Unmarshal(data, &msg)
-
-	if err != nil {
+		fmt.Println(data)
 		fmt.Printf("Error decodificando: %v\n", err)
 	} else {
 		// lo mando
-		datos := strings.NewReader(string(data))
+		datos := strings.NewReader(cadena)
 		// Hay que arreglar esta url, es para mongo
-		res, err := http.Post("http://35.239.78.64/mensajeria", "application/json; charset=UTF-8", datos)
+		res, err := http.Post("http://35.188.112.73/mongo/mensajeria", "application/json; charset=UTF-8", datos)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -47,12 +42,12 @@ func ImprimirMensaje(m *redis.Message) {
 		defer res.Body.Close()
 
 		// REDIS
-		res2, err := http.Post("http://35.239.78.64/mensajeria2", "application/json; charset=UTF-8", datos)
-		if err != nil {
-			log.Fatal(err)
-		}
+		// res2, err := http.Post("http://35.239.78.64/mensajeria2", "application/json; charset=UTF-8", datos)
+		// if err != nil {
+		// 	log.Fatal(err)
+		// }
 
-		defer res2.Body.Close()
+		// defer res2.Body.Close()
 	}
 
 	// obj_msg_sender, _ := json.Marshal(cadena)
@@ -62,7 +57,7 @@ func ImprimirMensaje(m *redis.Message) {
 func main() {
 	// Set Connection to redis
 	client := redis.NewClient(&redis.Options{
-		Addr:     "34.70.56.51:6379",
+		Addr:     "35.246.53.188:30089",
 		Password: "",
 		DB:       0,
 	})
@@ -84,7 +79,8 @@ func main() {
 		if err != nil {
 			logrus.Errorln("Error: ", err)
 		}
-		logrus.Infoln(val, msg.Payload)
+		logrus.Infoln(val, string([]byte(msg.Payload)))
 		ImprimirMensaje(msg)
 	}
 }
+

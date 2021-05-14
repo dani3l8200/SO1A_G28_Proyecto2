@@ -6,6 +6,6 @@ spec:
   selector:
     app: redispub
   ports:
-    - port: 6075
-      targetPort: 6075
-  type: LoadBalancer
+    - port: 80
+      targetPort: 80
+  type: NodePort

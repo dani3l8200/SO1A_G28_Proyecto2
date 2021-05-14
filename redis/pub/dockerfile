@@ -6,6 +6,6 @@ COPY . /go/src/redis-pub-sub
 
 RUN go mod download 
 
-EXPOSE 6075
+EXPOSE 80
 
 CMD [ "go", "run", "pub.go" ]
