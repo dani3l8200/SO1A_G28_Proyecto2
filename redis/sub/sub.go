@@ -57,7 +57,7 @@ func ImprimirMensaje(m *redis.Message) {
 func main() {
 	// Set Connection to redis
 	client := redis.NewClient(&redis.Options{
-		Addr:     "35.246.53.188:30089",
+		Addr:     "34.66.219.208:31039",
 		Password: "",
 		DB:       0,
 	})
@@ -83,4 +83,5 @@ func main() {
 		ImprimirMensaje(msg)
 	}
 }
+
 

@@ -22,7 +22,7 @@ type InfectedInput struct {
 func publish(w http.ResponseWriter, r *http.Request) {
 
 	client := redis.NewClient(&redis.Options{
-		Addr:     "35.246.53.188:30089",
+		Addr:     "34.66.219.208:31039",
 		Password: "",
 		DB:       0,
 	})
@@ -42,7 +42,7 @@ func publish(w http.ResponseWriter, r *http.Request) {
 
 func publishJSON(w http.ResponseWriter, r *http.Request) {
 	client := redis.NewClient(&redis.Options{
-		Addr:     "35.246.53.188:30089",
+		Addr:     "34.66.219.208:31039",
 		Password: "",
 		DB:       0,
 	})
@@ -77,14 +77,14 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 
 func handleRequests() {
 
-	myRouter := mux.NewRouter().StrictSlash(true)
+	myRouter := mux.NewRouter()
 
-	myRouter.HandleFunc("/", homePage)
-	myRouter.HandleFunc("/publish", publish).Methods("GET")
-	myRouter.HandleFunc("/publish/json", publishJSON).Methods("POST")
+	myRouter.HandleFunc("/", homePage).Methods(http.MethodGet)
+	myRouter.HandleFunc("/", publishJSON).Methods(http.MethodPost)
 	log.Fatal(http.ListenAndServe(":80", myRouter))
 }
 
 func main() {
 	handleRequests()
 }
+
