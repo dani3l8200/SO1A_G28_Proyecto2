@@ -7,6 +7,7 @@ import (
 	"infectedclient/infectedpb"
 	"io/ioutil"
 	"net/http"
+	"os"
 
 	"github.com/go-playground/validator"
 	"github.com/gorilla/mux"
@@ -14,10 +15,14 @@ import (
 	"google.golang.org/grpc"
 )
 
-const port int = 10000
+const port int = 80
 
 // use a single instance of Validate, it caches struct info
 var validate *validator.Validate
+var (
+	host     = os.Getenv("GRPC_HOST")
+	portGRPC = string(os.Getenv("GRPC_PORT"))
+)
 
 type InfectedInput struct {
 	Name        string `json:"name" validate:"required"`
@@ -53,7 +58,8 @@ func conexion(w http.ResponseWriter, r *http.Request) {
 	// log.Infof("Received the following text to categorize: %s", infectedInput)
 
 	fmt.Println("Hello I'm a client")
-	cc, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+	
+	cc, err := grpc.Dial(host+":"+portGRPC, grpc.WithInsecure())
 
 	if err != nil {
 		log.Fatalf("Could not connect: %v", err)
@@ -70,25 +76,12 @@ func conexion(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	// fmt.Println("Hello I'm a client")
-	// cc, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
-
-	// if err != nil {
-	// 	log.Fatalf("Could not connect: %v", err)
-	// }
-
-	// defer cc.Close()
-
-	// c := infectedpb.NewInfectedServiceClient(cc)
-	// // fmt.Printf("Created client: %f", c)
-	// doUnary(c)
 	address := fmt.Sprintf(":%d", port)
 	log.Infof("Starting HTTP REST API at port %s ...", address)
 	log.SetLevel(log.InfoLevel)
 
 	// initialize validator
 	validate = validator.New()
-
 	// initialize router and add endpoints
 	router := mux.NewRouter()
 	router.HandleFunc("/", conexion).Methods(http.MethodPost)
@@ -113,3 +106,4 @@ func doUnary(c infectedpb.InfectedServiceClient, data InfectedInput) {
 	}
 	log.Printf("Response from Infected: %v", res.Result)
 }
+

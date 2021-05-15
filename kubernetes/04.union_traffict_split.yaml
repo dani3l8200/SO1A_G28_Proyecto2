@@ -7,6 +7,6 @@ spec:
   service: api-service
   backends:
   - service: redismessage
-    weight: 900m
-  - service: error-injector
-    weight: 100m
+    weight: 500m
+  - service: grpcmessage
+    weight: 500m
