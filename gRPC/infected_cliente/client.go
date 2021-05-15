@@ -7,7 +7,6 @@ import (
 	"infectedclient/infectedpb"
 	"io/ioutil"
 	"net/http"
-	"os"
 
 	"github.com/go-playground/validator"
 	"github.com/gorilla/mux"
@@ -19,10 +18,6 @@ const port int = 80
 
 // use a single instance of Validate, it caches struct info
 var validate *validator.Validate
-var (
-	host     = os.Getenv("GRPC_HOST")
-	portGRPC = string(os.Getenv("GRPC_PORT"))
-)
 
 type InfectedInput struct {
 	Name        string `json:"name" validate:"required"`
@@ -59,7 +54,7 @@ func conexion(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("Hello I'm a client")
 	
-	cc, err := grpc.Dial(host+":"+portGRPC, grpc.WithInsecure())
+	cc, err := grpc.Dial("0.0.0.0:50051", grpc.WithInsecure())
 
 	if err != nil {
 		log.Fatalf("Could not connect: %v", err)
@@ -106,4 +101,3 @@ func doUnary(c infectedpb.InfectedServiceClient, data InfectedInput) {
 	}
 	log.Printf("Response from Infected: %v", res.Result)
 }
-

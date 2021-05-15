@@ -21,17 +21,9 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 80
-        env:                     
-          - name: GRPC_HOST
-            value: grpcmessage
-          - name: GRPC_PORT
-            value: "50051"
       - name: grpcserver-container
         imagePullPolicy: Always
         image: dani3l8200/grpcserver-sub
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 50051
 ---
 apiVersion: v1
 kind: Service
@@ -44,6 +36,3 @@ spec:
   ports:
     - name: service
       port: 80
-    - name: internalservice
-      port: 50051
-      targetPort: 50051
