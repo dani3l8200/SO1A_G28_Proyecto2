@@ -1,9 +1,9 @@
 
 FROM node:14.9 as build
 
-WORKDIR /client
+WORKDIR /fronted
 
-ENV PATH /client/node_modules/.bin:$PATH
+ENV PATH /fronted/node_modules/.bin:$PATH
 
 COPY package*.json ./
 
