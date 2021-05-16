@@ -40,9 +40,7 @@ async function guardarRegistro(req, res) {
         }
     });
 
-    let data = { data: req.body};
-    console.log(data);
-
+    let data = req.body;
     //TODO agregar el valor de key 
     const data_json = JSON.stringify(data);
     client.setex(indice.toString(), 3600, data_json, (err, resp) => {
