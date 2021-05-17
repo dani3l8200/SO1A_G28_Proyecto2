@@ -7,6 +7,8 @@ spec:
   service: api-service
   backends:
   - service: redismessage
-    weight: 500m
+    weight: 333m
   - service: grpcmessage
-    weight: 500m
+    weight: 333m
+  - service: kafkamessage
+    weight: 333m

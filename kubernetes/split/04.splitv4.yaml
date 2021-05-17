@@ -1,0 +1,12 @@
+apiVersion: split.smi-spec.io/v1alpha1
+kind: TrafficSplit
+metadata:
+  name: traffic-split
+  namespace: project
+spec:
+  service: api-service
+  backends:
+  - service: redismessage
+    weight: 500m
+  - service: kafkamessage
+    weight: 500m
