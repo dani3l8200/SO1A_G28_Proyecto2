@@ -35,6 +35,7 @@
     - [En la pagina registry container muestra la imagen](#en-la-pagina-registry-container-muestra-la-imagen)
     - [En google cloud run se da crear servicio y se realiza la siguiente configuracion.](#en-google-cloud-run-se-da-crear-servicio-y-se-realiza-la-siguiente-configuracion)
     - [En el puerto es de suma importancia que se ponga la del contenedor en este caso como es un servidor de NGINX, por default es el 80 por lo que se coloca este puerto.](#en-el-puerto-es-de-suma-importancia-que-se-ponga-la-del-contenedor-en-este-caso-como-es-un-servidor-de-nginx-por-default-es-el-80-por-lo-que-se-coloca-este-puerto)
+  - [Serverless-Functions](#Serverless-Functions)
   - [Bibliografia](#bibliografia)
 
 
@@ -180,6 +181,30 @@ Para que funcionen sin problema estos comandos debemos estar logueados en nuestr
 ![alt](./img/util/Captura%20de%20pantalla%202021-03-23%20213532.png)
 
 ![alt](./img/util/Captura%20de%20pantalla%202021-03-23%20215737.png)
+
+## Serverless-Functions
+
+Es considerado un Faas, se pueden implementar lenguajes como Python, Js, Go, entre otros.
+Se utilizó GCP para la creación de las serverless functions, en el apartado de cloud functions
+![alt](./img/util/sf1.png)
+
+Se hace uso del activador porque una cloud function está basada en eventos que pueden ser internos o externos, HTTP es un servicio y es un evento externo, que alguien más activa, que un cliente hace una petición, es como un backend con una cloud function.
+![alt](./img/util/sf2.png)
+
+En este caso permitimos el acceso de todos lados, a cada función se le puede asignar memoria, un tiempo de espera, la cuenta, en este caso lo dejamos como app engine para que le acceso a todos.
+![alt](./img/util/sf3.png)
+
+Tenemos el entorno de ejecución, tenemos el index.js que es el cloud función en sí, y el package.json que es lo necesario para que jale.
+![alt](./img/util/sf4.png)
+
+Le damos en implementar para poner en marcha la cloud function
+![alt](./img/util/sf5.png)
+
+Tenemos un activador de la función, gracias a ese activador (definimos que sería un http) la función se disparará y se ejecutará el contenido de ella.
+![alt](./img/util/sf6.png)
+
+
+
 
 ## Bibliografia
 1. Albornoz, D. (9 de septiembre de 2020). Cómo instalar y configurar Docker en Ubuntu 18.04. Recuperado el 19 de octubre de 2020, de https://www.hostinger.es/tutoriales/comoinstalar-y-usar-docker-en-ubuntu/
