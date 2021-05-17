@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -19,10 +18,10 @@ type InfectedInput struct {
 	VaccineType string `json:"vaccine_type" validate:"required"`
 }
 
-func publish(w http.ResponseWriter, r *http.Request) {
+/*func publish(w http.ResponseWriter, r *http.Request) {
 
 	client := redis.NewClient(&redis.Options{
-		Addr:     "34.66.219.208:31039",
+		Addr:     "35.245.206.220:30656",
 		Password: "",
 		DB:       0,
 	})
@@ -38,11 +37,11 @@ func publish(w http.ResponseWriter, r *http.Request) {
 		log.Fatalln(err)
 	}
 
-}
+}*/
 
 func publishJSON(w http.ResponseWriter, r *http.Request) {
 	client := redis.NewClient(&redis.Options{
-		Addr:     "34.66.219.208:31039",
+		Addr:     "35.245.206.220:30656",
 		Password: "",
 		DB:       0,
 	})
@@ -87,4 +86,3 @@ func handleRequests() {
 func main() {
 	handleRequests()
 }
-
