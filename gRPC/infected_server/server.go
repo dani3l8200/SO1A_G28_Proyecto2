@@ -42,18 +42,18 @@ func ImprimirMensaje(m InfectedOutput) {
 	} else {
 		// Mongo
 		datos := strings.NewReader(string(data))
-		res, err := http.Post("http://35.239.78.64/mensajeria", "application/json; charset=UTF-8", datos)
+		res, err := http.Post("http://35.188.112.73/mongo/mensajeria", "application/json; charset=UTF-8", datos)
 		if err != nil {
 			log.Fatal(err)
 		}
 		defer res.Body.Close()
 
 		// REDIS
-		res2, err := http.Post("http://35.239.78.64/mensajeria", "application/json; charset=UTF-8", datos)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer res2.Body.Close()
+		// res2, err := http.Post("http://35.239.78.64/mensajeria", "application/json; charset=UTF-8", datos)
+		// if err != nil {
+		// 	log.Fatal(err)
+		// }
+		// defer res2.Body.Close()
 	}
 
 	// obj_msg_sender, _ := json.Marshal(cadena)
@@ -82,7 +82,7 @@ func (*server) Infected(ctx context.Context, req *infectedpb.InfectedRequest) (*
 func main() {
 	fmt.Println("Hello World")
 
-	lis, err := net.Listen("tcp", ":50051")
+	lis, err := net.Listen("tcp", "0.0.0.0:50051")
 
 	if err != nil {
 		log.Fatalf("Failled to listend: %v", err)
@@ -96,5 +96,4 @@ func main() {
 		log.Fatalf("failed to server %v", err)
 	}
 }
-
 

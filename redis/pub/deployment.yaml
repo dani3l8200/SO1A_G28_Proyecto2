@@ -1,19 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: redis-pub-deploy
+  name: redispub-deploy
+  namespace: project
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: redispub
   template:
     metadata:
+      annotations:
+        linkerd.io/inject: enabled
       labels:
         app: redispub
     spec:
       containers:
       - name: redispub-container
         image: dani3l8200/redispub
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
+

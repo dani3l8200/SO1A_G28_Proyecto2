@@ -31,7 +31,7 @@ class Reader():
         # print('>>Read: Iniciando con la carga de datos')
         
         try:
-            with open('traffic.json', 'r',encoding='utf8') as data_file:
+            with open('traffic2.json', 'r',encoding='utf8') as data_file:
                 global len_archive
                 self.infected_users = json.loads(data_file.read())
                 print('data leida correctamente', len(self.infected_users))

@@ -6,8 +6,8 @@ const {get_all_registros  , get_ultimos_5 , getPie_rep3 , rangoEdades } = requir
 
 
 // r es un bojeto Router
-router.route('/mongo/mensajeria/').post(saveMsg);  // http://localhost:4000/mongo/mensajeria     PARA GUARDAR EN LA BASE DE DATOS DE MONGO 
-router.route('/mensajeria/').post(saveMsg);
+router.route('/mongo/mensajeria/').post(saveMsg);  //   http://35.188.112.73/mongo/mensajeria                  PARA GUARDAR EN LA BASE DE DATOS DE MONGO Y REDIS
+router.route('/mensajeria/').post(saveMsg);//   http://35.188.112.73/mensajeria 
 
 router.route('/consulta/1').get(get_all_registros);             // MONGO
 //router.route('/consulta/2').get(get_all_registros); // REDIS

@@ -23,7 +23,7 @@ export default class TableRep1 extends Component {
       tituloReporte: this.props.tituloReporte || '',
       titulos: this.props.titulos || ['name', 'location', 'gender', 'age', 'vaccine_type'],
       numConsulta: this.props.numConsulta || 1,
-      consulta: this.props.consulta || [{ name: 'hola', location: 'guate', gender: 'macho', age: 78, vaccine_type: 'ok' }], // no se envia sino que se hace la peticion desde aca: :v
+      consulta: this.props.consulta || [], // no se envia sino que se hace la peticion desde aca: :v
       redis: this.props.redis || false,
       urlRedis: this.props.urlRedis || ''
     }
@@ -44,11 +44,11 @@ export default class TableRep1 extends Component {
     if (this.state.redis ===  true){
       const res = await axios.get(this.state.urlRedis);
       let top = [];
-/*      for (let i = 0; i < res.data.length && res.data; i++) {
+      for (let i = 0; i < res.data.length && i < 10; i++) {
         top.push(res.data[i])
-      }*/
-      console.log("FALTA TOP", res);
-      this.setState({ consulta: res.data });
+      }
+      console.log("TOP 10", top);
+      this.setState({ consulta: top });
     }else{
       const ruta = url + "/consulta/"+this.state.numConsulta;
       const res = await axios.get(ruta);

@@ -1,0 +1,12 @@
+FROM golang:1.15.3
+
+WORKDIR /go/src/app
+
+COPY . .
+
+RUN go mod download
+
+EXPOSE 80
+
+CMD ["go", "run", "pub.go"]
+

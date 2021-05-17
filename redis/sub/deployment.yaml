@@ -1,17 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: redis-sub-deploy
+  name: redissub-deploy
+  namespace: project
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: redissub
   template:
     metadata:
+      annotations:
+        linkerd.io/inject: enabled
       labels:
         app: redissub
     spec:
       containers:
       - name: redissub-container
+        imagePullPolicy: Always
         image: dani3l8200/redissub
+

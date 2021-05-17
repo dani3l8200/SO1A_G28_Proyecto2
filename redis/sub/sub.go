@@ -26,7 +26,7 @@ func ImprimirMensaje(m *redis.Message) {
 	cadena := string([]byte(m.Payload))
 	// var msg InfectedInput
 	data, err := json.Marshal(cadena)
-	
+
 	if err != nil {
 		fmt.Println(data)
 		fmt.Printf("Error decodificando: %v\n", err)
@@ -57,7 +57,7 @@ func ImprimirMensaje(m *redis.Message) {
 func main() {
 	// Set Connection to redis
 	client := redis.NewClient(&redis.Options{
-		Addr:     "35.246.53.188:30089",
+		Addr:     "35.245.206.220:30656",
 		Password: "",
 		DB:       0,
 	})
@@ -83,4 +83,3 @@ func main() {
 		ImprimirMensaje(msg)
 	}
 }
-

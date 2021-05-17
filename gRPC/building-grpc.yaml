@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grpcmessage
+  namespace: project
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: grpcmessage
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app: grpcmessage
+    spec:
+      containers:
+      - name: grpcclient-container
+        image: dani3l8200/grpcclient-pub
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+      - name: grpcserver-container
+        imagePullPolicy: Always
+        image: dani3l8200/grpcserver-sub
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpcmessage
+  namespace: project
+spec:
+  selector:
+    app: grpcmessage
+  ports:
+    - name: service
+      port: 80
