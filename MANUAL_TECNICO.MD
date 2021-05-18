@@ -214,8 +214,30 @@ Tenemos un activador de la funci√≥n, gracias a ese activador (definimos que ser√
 
 ![alt](./img/util/sf6.png)
 
+## React App and NodeJS
+
+Estructura del proyecto
+
+![alt](./img/util/estructura.png)
 
 
+- en la carpeta components estan los componentes pertenecientes a una pagina o varias ,  en esta carpeta hay componentes reutilizables 
+- en la carpeta pages se almacenan los componentes principales de la applicacion
+- en la carpeta routes se declaran todas las rutas que tiene la app
+
+
+### seccion de paquetes
+en el packeage.json de la applicaccion se pueden ver las dependencias usadas en este caso la mas importante del proyecto es la de react-sigle-maps la cual sirvio para hacer el mapa
+interactivo.
+![alt](./img/util/packeage_json_app.png)
+
+por otra parte en el backend se usaron estos modulos , como el de cors , para comunicacion con el fronted , dotenv para almacenar variables de entorno, mongodb como driver para manejar la base de datos. 
+
+![alt](./img/util/node.png)
+
+en esta imagen se puede ver la implementacion del mapa el cual hace uso de una api para obtener la informacion de los paises , la api devuelve los nombres en ingles.
+
+![alt](./img/util/mapa_code.png)
 
 
 ## Bibliografia
