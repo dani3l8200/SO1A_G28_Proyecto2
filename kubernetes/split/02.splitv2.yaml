@@ -1,0 +1,14 @@
+apiVersion: split.smi-spec.io/v1alpha1
+kind: TrafficSplit
+metadata:
+  name: traffic-split
+  namespace: project
+spec:
+  service: api-service
+  backends:
+  - service: redismessage
+    weight: 333m
+  - service: grpcmessage
+    weight: 333m
+  - service: error-injector
+    weight: 333m

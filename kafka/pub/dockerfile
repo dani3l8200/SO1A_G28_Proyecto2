@@ -8,5 +8,5 @@ RUN go mod download
 
 EXPOSE 80
 
-CMD ["go", "run", "client.go"]
+CMD ["go", "run", "pub.go"]
 

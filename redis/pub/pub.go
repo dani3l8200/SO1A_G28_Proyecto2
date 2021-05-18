@@ -1,11 +1,9 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/gorilla/mux"
@@ -20,10 +18,10 @@ type InfectedInput struct {
 	VaccineType string `json:"vaccine_type" validate:"required"`
 }
 
-func publish(w http.ResponseWriter, r *http.Request) {
+/*func publish(w http.ResponseWriter, r *http.Request) {
 
 	client := redis.NewClient(&redis.Options{
-		Addr:     "34.70.56.51:6379",
+		Addr:     "35.245.206.220:30656",
 		Password: "",
 		DB:       0,
 	})
@@ -39,11 +37,11 @@ func publish(w http.ResponseWriter, r *http.Request) {
 		log.Fatalln(err)
 	}
 
-}
+}*/
 
 func publishJSON(w http.ResponseWriter, r *http.Request) {
 	client := redis.NewClient(&redis.Options{
-		Addr:     "34.70.56.51:6379",
+		Addr:     "35.245.206.220:30656",
 		Password: "",
 		DB:       0,
 	})
@@ -58,15 +56,13 @@ func publishJSON(w http.ResponseWriter, r *http.Request) {
 
 	log.Infoln(infectedinput)
 
-	json.NewEncoder(w).Encode(&infectedinput)
-
-	err := client.Publish(r.Context(), "canal1",
-		`{ "name": "`+infectedinput.Name+`",
-	"location": "`+infectedinput.Location+`",
-	"gender": "`+infectedinput.Gender+`",
-	"age": "`+strconv.FormatInt(int64(infectedinput.Age), 10)+`",
-	"vaccine_type": "`+infectedinput.VaccineType+`"
-}`).Err()
+	// json.NewEncoder(w).Encode(&infectedinput)
+	data, err := json.Marshal(infectedinput)
+	if err != nil {
+		log.Errorln(err)
+	}
+	err = client.Publish(r.Context(), "canal1",
+		data).Err()
 
 	if err != nil {
 		log.Errorln(err)
@@ -80,12 +76,11 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 
 func handleRequests() {
 
-	myRouter := mux.NewRouter().StrictSlash(true)
+	myRouter := mux.NewRouter()
 
-	myRouter.HandleFunc("/", homePage)
-	myRouter.HandleFunc("/publish", publish).Methods("GET")
-	myRouter.HandleFunc("/publish/json", publishJSON).Methods("POST")
-	log.Fatal(http.ListenAndServe(":6075", myRouter))
+	myRouter.HandleFunc("/", homePage).Methods(http.MethodGet)
+	myRouter.HandleFunc("/", publishJSON).Methods(http.MethodPost)
+	log.Fatal(http.ListenAndServe(":80", myRouter))
 }
 
 func main() {

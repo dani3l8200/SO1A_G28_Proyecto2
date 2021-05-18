@@ -2,10 +2,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: redispub-service
+  namespace: project
 spec:
   selector:
     app: redispub
   ports:
-    - port: 6075
-      targetPort: 6075
-  type: LoadBalancer
+    - name: service
+      port: 80
+      targetPort: 80
+

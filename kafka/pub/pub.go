@@ -4,14 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"infectedclient/infectedpb"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 
 	"github.com/go-playground/validator"
 	"github.com/gorilla/mux"
+	"github.com/segmentio/kafka-go"
 	log "github.com/sirupsen/logrus"
-	"google.golang.org/grpc"
 )
 
 const port int = 80
@@ -25,6 +25,30 @@ type InfectedInput struct {
 	Gender      string `json:"gender" validate:"required"`
 	Age         int32  `json:"age" validate:"required"`
 	VaccineType string `json:"vaccine_type" validate:"required"`
+	Canal       string `json:"canal"`
+}
+
+const (
+	TOPIC          = "sopes-topic"
+	BROKER_ADDRESS = "35.245.206.220:31783"
+)
+
+func KafkaProducer(ctx context.Context, message string, result string) {
+	i := 0
+
+	w := kafka.NewWriter(kafka.WriterConfig{
+		Brokers: []string{BROKER_ADDRESS},
+		Topic:   TOPIC,
+	})
+
+	err := w.WriteMessages(ctx, kafka.Message{
+		Key:   []byte(strconv.Itoa(i)),
+		Value: []byte(message),
+	})
+
+	if err != nil {
+		result = "F VACAS"
+	}
 }
 
 func conexion(w http.ResponseWriter, r *http.Request) {
@@ -41,7 +65,7 @@ func conexion(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-
+	infectedInput.Canal = "Kafka"
 	// perform validation of the unmarshalled struct
 	err = validate.Struct(&infectedInput)
 	if err != nil {
@@ -50,22 +74,14 @@ func conexion(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// log.Infof("Received the following text to categorize: %s", infectedInput)
+	// log.Infoln("Hello I'm a client")
+	data, _ := json.Marshal(infectedInput)
 
-	fmt.Println("Hello I'm a client")
-	
-	cc, err := grpc.Dial("0.0.0.0:50051", grpc.WithInsecure())
+	result := string(data)
 
-	if err != nil {
-		log.Fatalf("Could not connect: %v", err)
-	}
+	go KafkaProducer(context.Background(), string(data), result)
 
-	defer cc.Close()
-
-	c := infectedpb.NewInfectedServiceClient(cc)
-	// fmt.Printf("Created client: %f", c)
-	doUnary(c, infectedInput)
-
+	log.Infoln(result)
 	// encode conexionion Ouput into JSON and send to ResponseWriter
 	json.NewEncoder(w).Encode("ok")
 }
@@ -83,21 +99,4 @@ func main() {
 
 	// start http server
 	log.Fatal(http.ListenAndServe(address, router))
-}
-
-func doUnary(c infectedpb.InfectedServiceClient, data InfectedInput) {
-	req := &infectedpb.InfectedRequest{
-		Infected: &infectedpb.Infected{
-			Name:        data.Name,
-			Location:    data.Location,
-			Gender:      data.Gender,
-			Age:         data.Age,
-			VaccineType: data.VaccineType,
-		},
-	}
-	res, err := c.Infected(context.Background(), req)
-	if err != nil {
-		log.Fatalf("Error while calling infected RPC: %v", err)
-	}
-	log.Printf("Response from Infected: %v", res.Result)
 }

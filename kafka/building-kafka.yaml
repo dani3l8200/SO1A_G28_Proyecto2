@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafkamessage
+  namespace: project
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: kafkamessage
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app: kafkamessage
+    spec:
+      containers:
+      - name: kafkapub-container
+        image: dani3l8200/kafkapub
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+      - name: kafkasub-container
+        imagePullPolicy: Always
+        image: dani3l8200/kafkasub
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafkamessage
+  namespace: project
+spec:
+  selector:
+    app: kafkamessage
+  ports:
+    - name: service
+      port: 80
