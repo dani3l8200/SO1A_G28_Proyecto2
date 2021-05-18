@@ -21,12 +21,12 @@ R// Debemos tener en cuenta que el traffic split Imita tipo lo que es un balance
 2. GRPC
 3. REDIS
 
-![alt](./img/img1.png)
+![alt](./img/img1.PNG)
 
 1. GRPC
 2. Error Injector
 
-![alt](./img/img2.png)
+![alt](./img/img2.PNG)
 
 1. Error Injector 
 2. GRPC
